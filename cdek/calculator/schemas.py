@@ -1,7 +1,7 @@
 from typing import Optional
 from dataclasses import dataclass
 from decimal import Decimal
-from cdek.deliverypoint import ErrorDto, WarningDto
+from cdek.deliverypoint.schemas import ErrorDto, WarningDto
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -38,6 +38,11 @@ class CalculatorAvailableTariffsResponseTariffCodeDto:
     additional_order_types_param: Optional[
         list[CalculatorAvailableTariffsResponseDeliveryModeDto]
     ] = None
+
+
+@dataclass(frozen=True, kw_only=True)
+class allTariffCodes:
+    tariff_codes: list[CalculatorAvailableTariffsResponseTariffCodeDto]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -78,6 +83,11 @@ class TariffCodeDto:
     delivery_date_range: Optional[DeliveryDateRangeDto] = None
     errors: Optional[ErrorDto] = None
     warnings: Optional[WarningDto] = None
+
+
+@dataclass(frozen=True, kw_only=True)
+class TariffListCodes:
+    tariff_codes: list[TariffCodeDto]
 
 
 @dataclass(frozen=True, kw_only=True)

@@ -2,14 +2,14 @@ from typing import Any, Optional
 import httpx
 from cdek._base import CDEKBase
 from cdek.calculator.schemas import (
-    TariffCodeDto,
+    TariffListCodes,
     TariffCode,
-    CalculatorAvailableTariffsResponseTariffCodeDto,
+    allTariffCodes,
 )
 
 
 class CDEKCalculator(CDEKBase):
-    def fetch_tarifflist(self, **params: Optional[Any]) -> list[TariffCodeDto]:
+    def fetch_tarifflist(self, **params: Optional[Any]) -> TariffListCodes:
         """/v2/calculator/tarifflist
 
         date
@@ -65,7 +65,7 @@ class CDEKCalculator(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
-        return [TariffCodeDto(**record) for record in responce.json()]
+        return TariffListCodes(**responce.json())
 
     def fetch_tariff(self, **params: Optional[Any]) -> TariffCode:
         """/v2/calculator/tariff
@@ -134,13 +134,10 @@ class CDEKCalculator(CDEKBase):
         )
         return TariffCode(**responce.json())
 
-    def fetch_alltariffs(self) -> list[CalculatorAvailableTariffsResponseTariffCodeDto]:
+    def fetch_alltariffs(self) -> allTariffCodes:
         """/v2/calculator/alltariffs"""
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/calculator/alltariffs",
             headers=self._fetch_base_header(),
         )
-        return [
-            CalculatorAvailableTariffsResponseTariffCodeDto(**record)
-            for record in responce.json()
-        ]
+        return allTariffCodes(**responce.json())

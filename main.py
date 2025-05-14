@@ -1,4 +1,4 @@
-from cdek import CDEKAuth, CDEKToken, CDEKCalculator
+from cdek import CDEKAuth, CDEKToken, CDEKLocation
 
 
 def fetch_fake_client_id() -> str:
@@ -20,8 +20,8 @@ def main() -> None:
     )
     cdek_token = CDEKToken(cdek_auth)
     print(cdek_token)
-    calculator = CDEKCalculator(cdek_token)
-    print(calculator.fetch_alltariffs())
+    calculator = CDEKLocation(cdek_token)
+    print(calculator.fetch_regions())
 
 
 if __name__ == "__main__":
