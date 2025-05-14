@@ -1,4 +1,4 @@
-from cdek import CDEKAuth, CDEKToken, CDEKDeliveryPoint
+from cdek import CDEKAuth, CDEKToken, CDEKCalculator
 
 
 def fetch_fake_client_id() -> str:
@@ -20,8 +20,8 @@ def main() -> None:
     )
     cdek_token = CDEKToken(cdek_auth)
     print(cdek_token)
-    delivery_point = CDEKDeliveryPoint(cdek_token)
-    print(delivery_point.fetch_deliverypoints(city_code=270))
+    calculator = CDEKCalculator(cdek_token)
+    print(calculator.fetch_alltariffs())
 
 
 if __name__ == "__main__":
