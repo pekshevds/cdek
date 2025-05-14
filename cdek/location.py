@@ -1,8 +1,8 @@
-from typing import Any
+from typing import Any, Optional
 from dataclasses import dataclass
 from decimal import Decimal
 import httpx
-from cdek import CDEKToken
+from cdek._base import CDEKBase
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -44,31 +44,26 @@ class SuggestCity:
     full_name: str
 
 
-class CDEKLocation:
-    def __init__(self, token: CDEKToken, fake: bool = True):
-        self.__token = token
-        self.__fake = fake
+class CDEKLocation(CDEKBase):
+    def fetch_regions(self, **params: Optional[Any]) -> list[Region]:
+        """/v2/location/regions
 
-    def _fetch_base_url(self) -> str:
-        return "https://api.edu.cdek.ru" if self.__fake else "https://api.cdek.ru"
+        country_codes
+        Array of strings
+        Массив кодов стран в формате ISO_3166-1_alpha-2
 
-    def _fetch_base_header(self) -> dict[str, str]:
-        return {"Authorization": f"Bearer {str(self.__token)}"}
+        size
+        number <integer>
+        Ограничение выборки результата. По умолчанию 1000. Обязателен, если указан page
 
-    def fetch_regions(
-        self,
-        country_codes: list[str],
-        size: int = 1000,
-        page: int = 0,
-        lang: str = "rus",
-    ) -> list[Region]:
-        """/v2/location/regions"""
-        params: dict[str, Any] = dict()
-        params["country_codes"] = country_codes
-        params["size"] = size
-        params["page"] = page
-        params["lang"] = lang
+        page
+        number <integer>
+        Номер страницы выборки результата. По умолчанию 0
 
+        lang
+        string <= 3 characters
+        Локализация. По умолчанию rus (доступны eng и zho)
+        """
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/regions",
             headers=self._fetch_base_header(),
@@ -76,36 +71,49 @@ class CDEKLocation:
         )
         return [Region(**record) for record in responce.json()]
 
-    def fetch_cities(
-        self,
-        country_codes: list[str],
-        region_code: int,
-        fias_guid: str = "",
-        postal_code: str = "",
-        code: int = 0,
-        city: str = "",
-        payment_limit: Decimal = Decimal("0"),
-        size: int = 1000,
-        page: int = 0,
-        lang: str = "rus",
-    ) -> list[City]:
-        """/v2/location/cities"""
-        params: dict[str, Any] = dict()
-        params["country_codes"] = country_codes
-        params["region_code"] = region_code
-        if fias_guid:
-            params["fias_guid"] = fias_guid
-        if postal_code:
-            params["postal_code"] = postal_code
-        if code:
-            params["code"] = code
-        if city:
-            params["city"] = city
-        if payment_limit:
-            params["payment_limit"] = payment_limit
-        params["size"] = size
-        params["page"] = page
-        params["lang"] = lang
+    def fetch_cities(self, **params: Optional[Any]) -> list[City]:
+        """/v2/location/cities
+
+        country_codes
+        Array of strings
+        Массив кодов стран в формате ISO_3166-1_alpha-2
+
+        region_code
+        integer <int32>
+        Код региона (справочник СДЭК)
+
+        fias_guid
+        string <uuid>
+        Уникальный идентификатор ФИАС населенного пункта
+
+        postal_code
+        string <= 255 characters
+        Почтовый индекс
+
+        code
+        integer <int32>
+        Код населенного пункта СДЭК
+
+        city
+        string <= 255 characters
+        Название населенного пункта. Должно соответствовать полностью
+
+        payment_limit
+        number <double>
+        Ограничение на сумму наложенного платежа. -1 - ограничения нет; 0 - наложенный платеж не принимается;
+
+        size
+        integer <int32>
+        Ограничение выборки результата. По умолчанию 1000. Обязателен, если указан page
+
+        page
+        integer <int32>
+        Номер страницы выборки результата. По умолчанию 0
+
+        lang
+        string <= 3 characters
+        Язык локализации ответа
+        """
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/cities",
             headers=self._fetch_base_header(),
@@ -113,10 +121,14 @@ class CDEKLocation:
         )
         return [City(**record) for record in responce.json()]
 
-    def fetch_postalcodes(self, code: int) -> PostalCode:
-        """/v2/location/postalcodes"""
-        params: dict[str, Any] = dict()
-        params["code"] = code
+    def fetch_postalcodes(self, **params: Optional[Any]) -> PostalCode:
+        """/v2/location/postalcodes
+
+        code
+        required
+        integer <int32>
+        Код города, которому принадлежат почтовые индексы
+        """
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/postalcodes",
             headers=self._fetch_base_header(),
@@ -124,14 +136,18 @@ class CDEKLocation:
         )
         return PostalCode(**responce.json())
 
-    def fetch_suggest_cities(
-        self, name: str, country_code: str = ""
-    ) -> list[SuggestCity]:
-        """/v2/location/suggest/cities"""
-        params: dict[str, Any] = dict()
-        params["name"] = name
-        if country_code:
-            params["country_code"] = country_code
+    def fetch_suggest_cities(self, **params: Optional[Any]) -> list[SuggestCity]:
+        """/v2/location/suggest/cities
+
+        name
+        required
+        string <= 255 characters
+        Наименование населенного пункта СДЭК
+
+        country_code
+        string <= 2 characters
+        Код страны в формате ISO_3166-1_alpha-2
+        """
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/suggest/cities",
             headers=self._fetch_base_header(),
