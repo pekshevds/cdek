@@ -41,7 +41,7 @@ class CalculatorAvailableTariffsResponseTariffCodeDto:
 
 
 @dataclass(frozen=True, kw_only=True)
-class allTariffCodes:
+class AllTariffCodes:
     tariff_codes: list[CalculatorAvailableTariffsResponseTariffCodeDto]
 
 
@@ -71,13 +71,13 @@ class DeliveryDateRangeDto:
 
 @dataclass(frozen=True, kw_only=True)
 class TariffCodeDto:
-    tariff_code: int = 0
-    tariff_name: str = ""
+    tariff_code: int
+    tariff_name: str
     tariff_description: str = ""
-    delivery_mode: int = 0
-    delivery_sum: Decimal = Decimal("0")
-    period_min: int = 0
-    period_max: int = 0
+    delivery_mode: int
+    delivery_sum: Decimal
+    period_min: int
+    period_max: int
     calendar_min: int = 0
     calendar_max: int = 0
     delivery_date_range: Optional[DeliveryDateRangeDto] = None
@@ -98,26 +98,26 @@ class CalcAdditionalServiceDto:
 
 @dataclass(frozen=True, kw_only=True)
 class CalcResponseAdditionalServiceDto:
-    code: str = ""
-    sum: Decimal = Decimal("0")
-    total_sum: Decimal = Decimal("0")
-    discount_percent: Decimal = Decimal("0")
-    discount_sum: Decimal = Decimal("0")
-    vat_rate: Decimal = Decimal("0")
-    vat_sum: Decimal = Decimal("0")
+    code: str
+    sum: Decimal
+    total_sum: Decimal
+    discount_percent: Decimal
+    discount_sum: Decimal
+    vat_rate: Decimal
+    vat_sum: Decimal
 
 
 @dataclass(frozen=True, kw_only=True)
 class TariffCode:
-    delivery_sum: Decimal = Decimal("0")
-    period_min: int = 0
-    period_max: int = 0
+    delivery_sum: Decimal
+    period_min: int
+    period_max: int
     calendar_min: int = 0
     calendar_max: int = 0
-    weight_calc: int = 0
+    weight_calc: int
     services: Optional[list[CalcResponseAdditionalServiceDto]] = None
-    total_sum: Decimal = Decimal("0")
-    currency: str = ""
+    total_sum: Decimal
+    currency: str
     errors: Optional[list[ErrorDto]] = None
     warnings: Optional[list[WarningDto]] = None
     delivery_date_range: Optional[DeliveryDateRangeDto] = None

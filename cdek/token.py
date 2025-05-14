@@ -26,12 +26,10 @@ class CDEKToken:
         live_time = 3600
         return (datetime.now() - self.__update_date).total_seconds() > live_time
 
-    def _fetch_base_url(self) -> str:
-        return "https://api.edu.cdek.ru" if self.__fake else "https://api.cdek.ru"
-
     def _fetch_token(self) -> str:
         responce = Client().post(
-            self._fetch_base_url() + "/v2/oauth/token",
+            url=("https://api.edu.cdek.ru" if self.__fake else "https://api.cdek.ru")
+            + "/v2/oauth/token",
             headers={"content-type": "application/x-www-form-urlencoded"},
             params=asdict(self.__cdek_auth),
         )

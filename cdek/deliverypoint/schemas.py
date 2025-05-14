@@ -13,19 +13,19 @@ class DeliveryPointType(Enum):
 @dataclass(frozen=True, kw_only=True)
 class PhoneDto:
     number: str = ""
-    additional: str = ""
+    additional: str
 
 
 @dataclass(frozen=True, kw_only=True)
 class OfficeImageDto:
     number: int = 0
-    url: str = ""
+    url: str
 
 
 @dataclass(frozen=True, kw_only=True)
 class OfficeWorkTimeDto:
-    day: int = 0
-    time: str = ""
+    day: int
+    time: str
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -38,11 +38,11 @@ class LocalTime:
 
 @dataclass(frozen=True, kw_only=True)
 class OfficeWorkTimeExceptionDto:
-    date_start: str = ""
-    date_end: str = ""
+    date_start: str
+    date_end: str
     time_start: Optional[LocalTime] = None
     time_end: Optional[LocalTime] = None
-    is_working: bool = False
+    is_working: bool
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -82,37 +82,37 @@ class OfficeLocationDto:
 
 @dataclass(frozen=True, kw_only=True)
 class DeliveryPoint:
-    code: str = ""
+    code: str
     name: str = ""
-    uuid: str = ""
+    uuid: str
     address_comment: str = ""
     nearest_station: str = ""
     nearest_metro_station: str = ""
-    work_time: str = ""
-    phones: Optional[list[PhoneDto]] = None
+    work_time: str
+    phones: Optional[list[PhoneDto]]
     email: str = ""
     note: str = ""
-    type: str = ""
-    owner_code: str = ""
-    take_only: bool = False
-    is_handout: bool = False
-    is_reception: bool = False
-    is_dressing_room: bool = False
+    type: str
+    owner_code: str
+    take_only: bool
+    is_handout: bool
+    is_reception: bool
+    is_dressing_room: bool
     is_marketplace: bool = False
     is_ltl: bool = False
-    have_cashless: bool = False
-    have_cash: bool = False
-    have_fast_payment_system: bool = False
-    allowed_cod: bool = False
+    have_cashless: bool
+    have_cash: bool
+    have_fast_payment_system: bool
+    allowed_cod: bool
     site: str = ""
     office_image_list: Optional[list[OfficeImageDto]] = None
-    work_time_list: Optional[list[OfficeWorkTimeDto]] = None
+    work_time_list: Optional[list[OfficeWorkTimeDto]]
     work_time_exception_list: Optional[list[OfficeWorkTimeExceptionDto]] = None
     weight_min: Decimal = Decimal("0")
     weight_max: Decimal = Decimal("0")
     dimensions: Optional[OfficeCellDimensionsDto] = None
     errors: Optional[ErrorDto] = None
     warnings: Optional[WarningDto] = None
-    location: Optional[OfficeLocationDto] = None
+    location: Optional[OfficeLocationDto]
     distance: int = 0
     fulfillment: bool = False

@@ -4,7 +4,7 @@ from cdek._base import CDEKBase
 from cdek.calculator.schemas import (
     TariffListCodes,
     TariffCode,
-    allTariffCodes,
+    AllTariffCodes,
 )
 
 
@@ -134,10 +134,10 @@ class CDEKCalculator(CDEKBase):
         )
         return TariffCode(**responce.json())
 
-    def fetch_alltariffs(self) -> allTariffCodes:
+    def fetch_alltariffs(self) -> AllTariffCodes:
         """/v2/calculator/alltariffs"""
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/calculator/alltariffs",
             headers=self._fetch_base_header(),
         )
-        return allTariffCodes(**responce.json())
+        return AllTariffCodes(**responce.json())
