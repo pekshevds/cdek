@@ -1,0 +1,41 @@
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from httpx import Client
+
+
+@dataclass(frozen=True, kw_only=True)
+class CDEKAuth:
+    grant_type: str = "client_credentials"
+    client_id: str
+    client_secret: str
+
+
+class CDEKToken:
+    def __init__(self, cdek_auth: CDEKAuth, fake: bool = True) -> None:
+        self.__cdek_auth = cdek_auth
+        self.__fake = fake
+        self.__token = ""
+        self.__update_date = datetime.now()
+        self.update_token()
+
+    def update_token(self) -> None:
+        self.__update_date = datetime.now()
+        self.__token = self._fetch_token()
+
+    def need_update(self) -> bool:
+        live_time = 3600
+        return (datetime.now() - self.__update_date).total_seconds() > live_time
+
+    def _fetch_base_url(self) -> str:
+        return "https://api.edu.cdek.ru" if self.__fake else "https://api.cdek.ru"
+
+    def _fetch_token(self) -> str:
+        responce = Client().post(
+            self._fetch_base_url() + "/v2/oauth/token",
+            headers={"content-type": "application/x-www-form-urlencoded"},
+            params=asdict(self.__cdek_auth),
+        )
+        return responce.json().get("access_token", "")
+
+    def __str__(self) -> str:
+        return self.__token
