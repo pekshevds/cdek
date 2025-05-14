@@ -96,9 +96,7 @@ class CDEKLocation(CDEKBase):
         )
         return PostalCode(**responce.json())
 
-    def fetch_suggest_cities(
-        self, name: str, **params: Optional[Any]
-    ) -> list[SuggestCity]:
+    def fetch_suggest_cities(self, **params: Optional[Any]) -> list[SuggestCity]:
         """/v2/location/suggest/cities
 
         name

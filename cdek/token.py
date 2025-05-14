@@ -15,14 +15,13 @@ class CDEKToken:
         self.__cdek_auth = cdek_auth
         self.__fake = fake
         self.__token = ""
-        self.__update_date = datetime.now()
         self.update_token()
 
     def update_token(self) -> None:
         self.__update_date = datetime.now()
         self.__token = self._fetch_token()
 
-    def need_update(self) -> bool:
+    def need_update_token(self) -> bool:
         live_time = 3600
         return (datetime.now() - self.__update_date).total_seconds() > live_time
 
