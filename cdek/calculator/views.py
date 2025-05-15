@@ -9,7 +9,7 @@ from cdek.calculator.schemas import (
 
 
 class CDEKCalculator(CDEKBase):
-    def fetch_tarifflist(self, **params: Optional[Any]) -> TariffListCodes:
+    def fetch_tarifflist(self, **params: Optional[Any]) -> TariffListCodes | None:
         """/v2/calculator/tarifflist
 
         date
@@ -65,9 +65,11 @@ class CDEKCalculator(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return TariffListCodes(**responce.json())
 
-    def fetch_tariff(self, **params: Optional[Any]) -> TariffCode:
+    def fetch_tariff(self, **params: Optional[Any]) -> TariffCode | None:
         """/v2/calculator/tariff
 
         date
@@ -132,12 +134,16 @@ class CDEKCalculator(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return TariffCode(**responce.json())
 
-    def fetch_alltariffs(self) -> AllTariffCodes:
+    def fetch_alltariffs(self) -> AllTariffCodes | None:
         """/v2/calculator/alltariffs"""
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/calculator/alltariffs",
             headers=self._fetch_base_header(),
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return AllTariffCodes(**responce.json())

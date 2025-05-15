@@ -5,7 +5,9 @@ from cdek.deliverypoint.schemas import DeliveryPoint
 
 
 class CDEKDeliveryPoint(CDEKBase):
-    def fetch_deliverypoints(self, **params: Optional[Any]) -> list[DeliveryPoint]:
+    def fetch_deliverypoints(
+        self, **params: Optional[Any]
+    ) -> list[DeliveryPoint] | None:
         """/v2/deliverypoints
         code
         string
@@ -122,4 +124,6 @@ class CDEKDeliveryPoint(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return [DeliveryPoint(**record) for record in responce.json()]

@@ -5,7 +5,7 @@ from cdek.location.schemas import Region, City, PostalCode, SuggestCity
 
 
 class CDEKLocation(CDEKBase):
-    def fetch_regions(self, **params: Optional[Any]) -> list[Region]:
+    def fetch_regions(self, **params: Optional[Any]) -> list[Region] | None:
         """/v2/location/regions
 
         country_codes
@@ -29,9 +29,11 @@ class CDEKLocation(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return [Region(**record) for record in responce.json()]
 
-    def fetch_cities(self, **params: Optional[Any]) -> list[City]:
+    def fetch_cities(self, **params: Optional[Any]) -> list[City] | None:
         """/v2/location/cities
 
         country_codes
@@ -79,9 +81,11 @@ class CDEKLocation(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return [City(**record) for record in responce.json()]
 
-    def fetch_postalcodes(self, **params: Optional[Any]) -> PostalCode:
+    def fetch_postalcodes(self, **params: Optional[Any]) -> PostalCode | None:
         """/v2/location/postalcodes
 
         code
@@ -94,9 +98,11 @@ class CDEKLocation(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return PostalCode(**responce.json())
 
-    def fetch_suggest_cities(self, **params: Optional[Any]) -> list[SuggestCity]:
+    def fetch_suggest_cities(self, **params: Optional[Any]) -> list[SuggestCity] | None:
         """/v2/location/suggest/cities
 
         name
@@ -113,4 +119,6 @@ class CDEKLocation(CDEKBase):
             headers=self._fetch_base_header(),
             params=params,
         )
+        if responce.status_code != httpx.codes.OK:
+            return None
         return [SuggestCity(**record) for record in responce.json()]
