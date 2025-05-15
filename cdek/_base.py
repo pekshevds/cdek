@@ -1,6 +1,14 @@
 from cdek.token import CDEKToken
 
 
+def fetch_fake_client_id() -> str:
+    return "wqGwiQx0gg8mLtiEKsUinjVSICCjtTEP"
+
+
+def fetch_fake_client_secret() -> str:
+    return "RmAmgvSgSl1yirlz9QupbzOJVqhCxcP5"
+
+
 class CDEKBase:
     def __init__(self, token: CDEKToken, fake: bool = True):
         self.__token = token

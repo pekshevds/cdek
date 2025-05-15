@@ -1,16 +1,10 @@
-from cdek import CDEKAuth, CDEKToken, CDEKLocation
-
-
-def fetch_fake_client_id() -> str:
-    return "wqGwiQx0gg8mLtiEKsUinjVSICCjtTEP"
-
-
-def fetch_fake_client_secret() -> str:
-    return "RmAmgvSgSl1yirlz9QupbzOJVqhCxcP5"
-
-
-def fetch_fake_url() -> str:
-    return "/v2/oauth/token"
+from cdek import (
+    CDEKAuth,
+    CDEKToken,
+    CDEKLocation,
+    fetch_fake_client_id,
+    fetch_fake_client_secret,
+)
 
 
 def main() -> None:
