@@ -65,7 +65,7 @@ class PostalCode:
 @dataclass(frozen=True, kw_only=True)
 class SuggestCityRequestDto:
     name: str
-    country_code: Optional[str] = None
+    country_code: Optional[str] = "RU"
 
 
 @dataclass(frozen=True, kw_only=True)
