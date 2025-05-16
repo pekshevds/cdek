@@ -12,8 +12,8 @@ class DeliveryPointType(Enum):
 
 @dataclass(frozen=True, kw_only=True)
 class PhoneDto:
-    number: str = ""
-    additional: str
+    number: str
+    additional: str = ""
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -40,8 +40,8 @@ class LocalTime:
 class OfficeWorkTimeExceptionDto:
     date_start: str
     date_end: str
-    time_start: Optional[LocalTime] = None
-    time_end: Optional[LocalTime] = None
+    time_start: LocalTime | None = None
+    time_end: LocalTime | None = None
     is_working: bool
 
 
@@ -66,17 +66,17 @@ class WarningDto:
 
 @dataclass(frozen=True, kw_only=True)
 class OfficeLocationDto:
-    country_code: str = ""
-    region_code: int = 0
-    region: str = ""
-    city_code: int = 0
-    city: str = ""
+    country_code: str
+    region_code: int
+    region: str
+    city_code: int
+    city: str
     fias_guid: str = ""
     postal_code: str = ""
-    longitude: Decimal = Decimal("0")
-    latitude: Decimal = Decimal("0")
-    address: str = ""
-    address_full: str = ""
+    longitude: Decimal
+    latitude: Decimal
+    address: str
+    address_full: str
     city_uuid: str = ""
 
 
@@ -89,7 +89,7 @@ class DeliveryPoint:
     nearest_station: str = ""
     nearest_metro_station: str = ""
     work_time: str
-    phones: Optional[list[PhoneDto]]
+    phones: list[PhoneDto]
     email: str = ""
     note: str = ""
     type: str
@@ -105,14 +105,14 @@ class DeliveryPoint:
     have_fast_payment_system: bool
     allowed_cod: bool
     site: str = ""
-    office_image_list: Optional[list[OfficeImageDto]] = None
+    office_image_list: list[OfficeImageDto] | None = None
     work_time_list: Optional[list[OfficeWorkTimeDto]]
-    work_time_exception_list: Optional[list[OfficeWorkTimeExceptionDto]] = None
+    work_time_exception_list: list[OfficeWorkTimeExceptionDto]
     weight_min: Decimal = Decimal("0")
     weight_max: Decimal = Decimal("0")
-    dimensions: Optional[OfficeCellDimensionsDto] = None
-    errors: Optional[ErrorDto] = None
-    warnings: Optional[WarningDto] = None
-    location: Optional[OfficeLocationDto]
+    dimensions: OfficeCellDimensionsDto | None = None
+    errors: ErrorDto | None = None
+    warnings: ErrorDto | None = None
+    location: OfficeLocationDto
     distance: int = 0
     fulfillment: bool = False

@@ -1,4 +1,3 @@
-from typing import Optional
 from dataclasses import dataclass
 from decimal import Decimal
 from cdek.deliverypoint.schemas import ErrorDto, WarningDto
@@ -14,7 +13,7 @@ class CalculatorAvailableTariffsResponseDeliveryModeDto:
 @dataclass(frozen=True, kw_only=True)
 class CalculatorAvailableTariffsResponseAdditionalOrderTypesParamDto:
     without_additional_order_type: bool = False
-    additional_order_types: Optional[list[str]] = None
+    additional_order_types: list[str] | None
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -29,15 +28,13 @@ class CalculatorAvailableTariffsResponseTariffCodeDto:
     width_max: int = 0
     height_min: int = 0
     height_max: int = 0
-    order_types: Optional[list[str]] = None
-    payer_contragent_type: Optional[list[str]] = None
-    recipient_contragent_type: Optional[list[str]] = None
-    delivery_modes: Optional[
-        list[CalculatorAvailableTariffsResponseDeliveryModeDto]
-    ] = None
-    additional_order_types_param: Optional[
-        list[CalculatorAvailableTariffsResponseDeliveryModeDto]
-    ] = None
+    order_types: list[str] | None
+    payer_contragent_type: list[str] | None
+    recipient_contragent_type: list[str] | None
+    delivery_modes: list[CalculatorAvailableTariffsResponseDeliveryModeDto] | None
+    additional_order_types_param: (
+        list[CalculatorAvailableTariffsResponseDeliveryModeDto] | None
+    )
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -57,7 +54,7 @@ class CalculatorLocationDto:
 
 @dataclass(frozen=True, kw_only=True)
 class CalcPackageRequestDto:
-    weight: int = 0
+    weight: int
     length: int = 0
     width: int = 0
     height: int = 0
@@ -80,14 +77,14 @@ class TariffCodeDto:
     period_max: int
     calendar_min: int = 0
     calendar_max: int = 0
-    delivery_date_range: Optional[DeliveryDateRangeDto] = None
-    errors: Optional[ErrorDto] = None
-    warnings: Optional[WarningDto] = None
+    delivery_date_range: DeliveryDateRangeDto | None = None
 
 
 @dataclass(frozen=True, kw_only=True)
 class TariffListCodes:
     tariff_codes: list[TariffCodeDto]
+    errors: ErrorDto | None = None
+    warnings: WarningDto | None = None
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -115,9 +112,9 @@ class TariffCode:
     calendar_min: int = 0
     calendar_max: int = 0
     weight_calc: int
-    services: Optional[list[CalcResponseAdditionalServiceDto]] = None
+    services: list[CalcResponseAdditionalServiceDto] | None
     total_sum: Decimal
     currency: str
-    errors: Optional[list[ErrorDto]] = None
-    warnings: Optional[list[WarningDto]] = None
-    delivery_date_range: Optional[DeliveryDateRangeDto] = None
+    errors: list[ErrorDto] | None = None
+    warnings: list[WarningDto] | None = None
+    delivery_date_range: DeliveryDateRangeDto | None

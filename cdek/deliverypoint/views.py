@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 import httpx
 from cdek._base import CDEKBase
 from cdek.deliverypoint.schemas import DeliveryPoint
@@ -6,7 +6,7 @@ from cdek.deliverypoint.schemas import DeliveryPoint
 
 class CDEKDeliveryPoint(CDEKBase):
     def fetch_deliverypoints(
-        self, **params: Optional[Any]
+        self, params: dict[str, Any]
     ) -> list[DeliveryPoint] | None:
         """/v2/deliverypoints
         code
@@ -119,11 +119,15 @@ class CDEKDeliveryPoint(CDEKBase):
         Example: page=2
         Номер страницы выборки результата
         """
+        if len(params.items()) == 0:
+            return None
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/deliverypoints",
             headers=self._fetch_base_header(),
             params=params,
         )
         if responce.status_code != httpx.codes.OK:
+            return None
+        if len(responce.json()) == 0:
             return None
         return [DeliveryPoint(**record) for record in responce.json()]

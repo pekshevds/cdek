@@ -18,4 +18,7 @@ class CDEKBase:
         return "https://api.edu.cdek.ru" if self.__fake else "https://api.cdek.ru"
 
     def _fetch_base_header(self) -> dict[str, str]:
-        return {"Authorization": f"Bearer {str(self.__token)}"}
+        return {
+            "Authorization": f"Bearer {str(self.__token)}",
+            "content-type": "application/json",
+        }

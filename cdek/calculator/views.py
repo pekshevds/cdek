@@ -1,4 +1,5 @@
-from typing import Any, Optional
+from typing import Any
+import json
 import httpx
 from cdek._base import CDEKBase
 from cdek.calculator.schemas import (
@@ -9,7 +10,7 @@ from cdek.calculator.schemas import (
 
 
 class CDEKCalculator(CDEKBase):
-    def fetch_tarifflist(self, **params: Optional[Any]) -> TariffListCodes | None:
+    def fetch_tarifflist(self, params: dict[str, Any]) -> TariffListCodes | None:
         """/v2/calculator/tarifflist
 
         date
@@ -45,31 +46,34 @@ class CDEKCalculator(CDEKBase):
         Возможные значения: rus, eng, zho.
         По умолчанию - rus
 
-        from_location
-        required
+        *from_location
         object (CalculatorLocationDto)
         Населённый пункт для вычислений тарифа
 
-        to_location
-        required
+        *to_location
         object (CalculatorLocationDto)
         Населённый пункт для вычислений тарифа
 
-        packages
-        required
+        *packages
         Array of objects (CalcPackageRequestDto)
         Места (упаковки) в заказе
         """
-        responce = httpx.post(
-            url=self._fetch_base_url() + "/v2/calculator/tarifflist",
-            headers=self._fetch_base_header(),
-            params=params,
-        )
+
+        try:
+            responce = httpx.post(
+                url=self._fetch_base_url() + "/v2/calculator/tarifflist",
+                headers=self._fetch_base_header(),
+                content=json.dumps(params),
+            )
+        except httpx.ReadTimeout:
+            return None
         if responce.status_code != httpx.codes.OK:
+            return None
+        if len(responce.json()) == 0:
             return None
         return TariffListCodes(**responce.json())
 
-    def fetch_tariff(self, **params: Optional[Any]) -> TariffCode | None:
+    def fetch_tariff(self, params: dict[str, Any]) -> TariffCode | None:
         """/v2/calculator/tariff
 
         date
@@ -94,18 +98,15 @@ class CDEKCalculator(CDEKBase):
         Возможные значения: rus, eng, zho.
         По умолчанию - rus
 
-        tariff_code
-        required
+        *tariff_code
         integer <int32>
         Код тарифа. Обязателен для расчета по коду тарифа
 
-        from_location
-        required
+        *from_location
         object (CalculatorLocationDto)
         Населённый пункт для вычислений тарифа
 
-        to_location
-        required
+        *to_location
         object (CalculatorLocationDto)
         Населённый пункт для вычислений тарифа
 
@@ -113,8 +114,7 @@ class CDEKCalculator(CDEKBase):
         Array of objects (CalcAdditionalServiceDto)
         Дополнительные услуги
 
-        packages
-        required
+        *packages
         Array of objects (CalcPackageRequestDto)
         Места (упаковки) в заказе
 
@@ -129,21 +129,31 @@ class CDEKCalculator(CDEKBase):
         11 - для доставки в рамках одного офиса "Один офис (ИМ)" (при условии, что офис отправителя и получателя совпадают);
         14 - для CDEK.Shopping
         """
-        responce = httpx.post(
-            url=self._fetch_base_url() + "/v2/calculator/tariff",
-            headers=self._fetch_base_header(),
-            params=params,
-        )
+        try:
+            responce = httpx.post(
+                url=self._fetch_base_url() + "/v2/calculator/tariff",
+                headers=self._fetch_base_header(),
+                content=json.dumps(params),
+            )
+        except httpx.ReadTimeout:
+            return None
         if responce.status_code != httpx.codes.OK:
+            return None
+        if len(responce.json()) == 0:
             return None
         return TariffCode(**responce.json())
 
     def fetch_alltariffs(self) -> AllTariffCodes | None:
         """/v2/calculator/alltariffs"""
-        responce = httpx.get(
-            url=self._fetch_base_url() + "/v2/calculator/alltariffs",
-            headers=self._fetch_base_header(),
-        )
+        try:
+            responce = httpx.get(
+                url=self._fetch_base_url() + "/v2/calculator/alltariffs",
+                headers=self._fetch_base_header(),
+            )
+        except httpx.ReadTimeout:
+            return None
         if responce.status_code != httpx.codes.OK:
+            return None
+        if len(responce.json()) == 0:
             return None
         return AllTariffCodes(**responce.json())
