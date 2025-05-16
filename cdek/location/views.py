@@ -1,11 +1,20 @@
-from typing import Any, Optional
+from dataclasses import asdict
 import httpx
 from cdek._base import CDEKBase
-from cdek.location.schemas import Region, City, PostalCode, SuggestCity
+from cdek.location.schemas import (
+    Region,
+    City,
+    PostalCode,
+    SuggestCity,
+    RegionsRequestDto,
+    V2LocationCitiesRequestDto,
+    PostalcodeRequestDto,
+    SuggestCityRequestDto,
+)
 
 
 class CDEKLocation(CDEKBase):
-    def fetch_regions(self, **params: Optional[Any]) -> list[Region] | None:
+    def fetch_regions(self, params: RegionsRequestDto) -> list[Region] | None:
         """/v2/location/regions
 
         country_codes
@@ -27,13 +36,13 @@ class CDEKLocation(CDEKBase):
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/regions",
             headers=self._fetch_base_header(),
-            params=params,
+            params=asdict(params),
         )
         if responce.status_code != httpx.codes.OK:
             return None
         return [Region(**record) for record in responce.json()]
 
-    def fetch_cities(self, **params: Optional[Any]) -> list[City] | None:
+    def fetch_cities(self, params: V2LocationCitiesRequestDto) -> list[City] | None:
         """/v2/location/cities
 
         country_codes
@@ -79,13 +88,13 @@ class CDEKLocation(CDEKBase):
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/cities",
             headers=self._fetch_base_header(),
-            params=params,
+            params=asdict(params),
         )
         if responce.status_code != httpx.codes.OK:
             return None
         return [City(**record) for record in responce.json()]
 
-    def fetch_postalcodes(self, **params: Optional[Any]) -> PostalCode | None:
+    def fetch_postalcodes(self, params: PostalcodeRequestDto) -> PostalCode | None:
         """/v2/location/postalcodes
 
         code
@@ -96,13 +105,15 @@ class CDEKLocation(CDEKBase):
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/postalcodes",
             headers=self._fetch_base_header(),
-            params=params,
+            params=asdict(params),
         )
         if responce.status_code != httpx.codes.OK:
             return None
         return PostalCode(**responce.json())
 
-    def fetch_suggest_cities(self, **params: Optional[Any]) -> list[SuggestCity] | None:
+    def fetch_suggest_cities(
+        self, params: SuggestCityRequestDto
+    ) -> list[SuggestCity] | None:
         """/v2/location/suggest/cities
 
         name
@@ -117,7 +128,7 @@ class CDEKLocation(CDEKBase):
         responce = httpx.get(
             url=self._fetch_base_url() + "/v2/location/suggest/cities",
             headers=self._fetch_base_header(),
-            params=params,
+            params=asdict(params),
         )
         if responce.status_code != httpx.codes.OK:
             return None
